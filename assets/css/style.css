@@ -288,7 +288,7 @@ h6 {
 
 #hero:before {
   content: "";
-  background: rgba(255, 255, 255, 0.8);
+  /* background: rgba(255, 255, 255, 0.8); */
   position: absolute;
   bottom: 0;
   top: 0;
@@ -370,7 +370,7 @@ section {
   margin-bottom: 20px;
   padding-bottom: 20px;
   position: relative;
-  color: #45505b;
+  color: #05bb39;
 }
 
 .section-title h2::before {
