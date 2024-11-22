@@ -487,7 +487,8 @@ section {
 
 .resume a
 {
-  color: white ;
+  color: white;
+  text-decoration: underline;
 }
 .resume .sub-title
 {
