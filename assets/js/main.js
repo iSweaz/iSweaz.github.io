@@ -57,7 +57,15 @@
       } else {
         navbarlink.classList.remove('active')
       }
-    })
+    });
+
+    let footer = select('footer');
+    if (footer && window.scrollY + window.innerHeight >= footer.offsetTop)
+    {
+      navbarlinks.forEach(link => link.classList.remove('active'));
+      const contactLink = select('#navbar .scrollto[href="#contact"]');
+      if (contactLink) contactLink.classList.add('active');
+    }
   }
   window.addEventListener('load', navbarlinksActive)
   onscroll(document, navbarlinksActive)
