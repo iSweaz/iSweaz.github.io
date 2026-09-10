@@ -45,22 +45,43 @@
   /**
    * Navbar links active state on scroll
    */
-  let navbarlinks = select('#navbar .scrollto', true)
+    let navbarlinks = select('#navbar .scrollto', true)
   const navbarlinksActive = () => {
-    let position = window.scrollY + 200
+    let position = window.scrollY + window.innerHeight / 2
     navbarlinks.forEach(navbarlink => {
       if (!navbarlink.hash) return
       let section = select(navbarlink.hash)
       if (!section) return
-      if (position >= section.offsetTop && position <= (section.offsetTop + section.offsetHeight)) {
+
+      let top = section.offsetTop
+      let bottom = section.offsetTop + section.offsetHeight
+
+      // Un lien peut couvrir d'autres sections sans entrée dédiée dans la
+      // navbar (ex: "about" couvre aussi "skills"), listées dans
+      // data-include="id1, id2" sur le lien <a>.
+      let extraIds = navbarlink.getAttribute('data-include')
+      if (extraIds) {
+        extraIds.split(',').forEach(id => {
+          let extraSection = select('#' + id.trim())
+          if (extraSection) {
+            bottom = Math.max(bottom, extraSection.offsetTop + extraSection.offsetHeight)
+          }
+        })
+      }
+      
+      if (position >= top && position <= bottom) {
         navbarlink.classList.add('active')
       } else {
         navbarlink.classList.remove('active')
       }
     });
 
+    // Cas particulier : le footer (#contact) est souvent trop court pour que
+    // le "milieu d'écran" (position) atteigne un jour son offsetTop. On
+    // détecte donc directement le fait d'avoir atteint le bas de la page.
     let footer = select('footer');
-    if (footer && window.scrollY + window.innerHeight >= footer.offsetTop)
+    let scrolledToBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 2)
+    if (footer && scrolledToBottom)
     {
       navbarlinks.forEach(link => link.classList.remove('active'));
       const contactLink = select('#navbar .scrollto[href="#contact"]');
